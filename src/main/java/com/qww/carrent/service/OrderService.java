@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qww.carrent.model.entity.Order;
 
 /**
-* @author hejiajun
+* @author qianweiwei
 * @description 针对表【order(订单表)】的数据库操作Service
 * @createDate 2024-10-27 22:23:35
 */

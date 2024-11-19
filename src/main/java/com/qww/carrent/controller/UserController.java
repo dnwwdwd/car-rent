@@ -29,8 +29,6 @@ import static com.qww.carrent.service.impl.UserServiceImpl.SALT;
 
 /**
  * 用户接口
- *
-
  */
 @RestController
 @RequestMapping("/user")
@@ -159,14 +157,15 @@ public class UserController {
 
     /**
      * 更新用户
-     *
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateUser(@RequestBody User user) {
         User newUser = new User();
         BeanUtils.copyProperties(user, newUser);
-        newUser.setUserPassword(DigestUtils.md5DigestAsHex((SALT + user.getUserPassword()).getBytes()));
+        if (!user.getUserPassword().equals(userService.getById(user.getId()).getUserPassword())) {
+            newUser.setUserPassword(DigestUtils.md5DigestAsHex((SALT + user.getUserPassword()).getBytes()));
+        }
         boolean b = userService.updateById(newUser);
         return ResultUtils.success(b);
     }
@@ -219,7 +218,7 @@ public class UserController {
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest,
-            HttpServletRequest request) {
+                                                       HttpServletRequest request) {
         if (userQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -246,7 +245,7 @@ public class UserController {
      */
     @PostMapping("/update/my")
     public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
-            HttpServletRequest request) {
+                                              HttpServletRequest request) {
         if (userUpdateMyRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

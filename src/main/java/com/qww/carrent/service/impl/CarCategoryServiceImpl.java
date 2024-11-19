@@ -7,7 +7,7 @@ import com.qww.carrent.service.CarCategoryService;
 import org.springframework.stereotype.Service;
 
 /**
-* @author hejiajun
+* @author qianweiwei
 * @description 针对表【car_category(汽车表)】的数据库操作Service实现
 * @createDate 2024-10-28 10:20:59
 */

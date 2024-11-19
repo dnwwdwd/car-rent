@@ -20,10 +20,10 @@
       @finishFailed="onFinishFailed"
   >
     <a-form-item
-        name="nickname"
+        name="userName"
         :rules="[{ required: true, message: '请输入账号' }]"
     >
-      <a-input v-model:value="formState.nickname" placeholder="请输入昵称">
+      <a-input v-model:value="formState.userName" placeholder="请输入昵称">
         <template #prefix>
           <UserOutlined class="site-form-item-icon" />
         </template>
@@ -96,7 +96,7 @@ const onFinish = async (values) => {
     userAccount: values.userAccount,
     userPassword: values.userPassword,
     checkPassword: values.checkPassword,
-    nickname: values.nickname,
+    userName: values.userName,
   });
   if (res.code === 0) {
     message.success('注册成功！');
@@ -114,7 +114,7 @@ function registerFailed() {
   formState.userAccount = '';
   formState.userPassword = '';
   formState.checkPassword = '';
-  formState.nickname = '';
+  formState.userName = '';
 }
 
 const onFinishFailed = (errorInfo) => {

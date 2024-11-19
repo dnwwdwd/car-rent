@@ -8,31 +8,31 @@
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
         <a-menu-item key="1">
           <router-link to="/admin/carRentManagement">
-            <RedditOutlined />
+            <RedditOutlined/>
             <span>汽车管理</span>
           </router-link>
         </a-menu-item>
         <a-menu-item key="2">
           <router-link to="/admin/carCategoryManagement">
-            <FormOutlined />
+            <FormOutlined/>
             <span>汽车分类管理</span>
           </router-link>
         </a-menu-item>
         <a-menu-item key="3">
           <router-link to="/admin/orderManagement">
-            <desktop-outlined />
+            <desktop-outlined/>
             <span>订单管理</span>
           </router-link>
         </a-menu-item>
         <a-menu-item key="4">
           <router-link to="/admin/newsManagement">
-            <CommentOutlined />
+            <CommentOutlined/>
             <span>资讯管理</span>
           </router-link>
         </a-menu-item>
         <a-menu-item key="5">
           <router-link to="/admin/userManagement">
-            <user-outlined />
+            <user-outlined/>
             <span>用户管理</span>
           </router-link>
         </a-menu-item>
@@ -43,7 +43,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center">
           <span style="font-size: 20px; margin-left: 20px; color: #1E90FF">{{ title }}</span>
           <div style="margin-right: 30px">
-            <a-dropdown >
+            <a-dropdown>
               <a-avatar
                   shape="circle"
                   :src="user.userAvatar"
@@ -144,11 +144,7 @@ onMounted(async () => {
 
 const userLogout = async () => {
   const res = await myAxios.post('/user/logout');
-  if (res.code === 0) {
-    message.success('退出成功');
-  } else {
-    message.error('退出失败');
-  }
+  message.success('退出成功');
 };
 
 </script>
@@ -163,6 +159,7 @@ const userLogout = async () => {
 .site-layout .site-layout-background {
   background: #fff;
 }
+
 [data-theme='dark'] .site-layout .site-layout-background {
   background: #141414;
 }

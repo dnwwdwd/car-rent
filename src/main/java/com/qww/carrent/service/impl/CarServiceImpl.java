@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
-* @author hejiajun
+* @author qianweiwei
 * @description 针对表【car_detail(汽车详情表)】的数据库操作Service实现
 * @createDate 2024-10-27 22:23:29
 */

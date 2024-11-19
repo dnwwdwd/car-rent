@@ -1,7 +1,7 @@
 <template>
   <a-layout class="layout" style="min-height: 100vh; display: flex; flex-direction: column;">
     <a-layout-header :style="{ background: '#fff', display: 'flex', alignItems: 'center', marginBottom: '24px' }">
-      <img src="../assets/logo.png" alt="Logo" style="height: 40px; margin-right: 20px" />
+      <img src="../assets/logo.png" alt="Logo" style="height: 40px; margin-right: 20px"/>
       <span style="font-size: 15px; color: #1E90FF">基于Java的汽车租赁平台</span>
       <!-- 动态高亮菜单项 -->
       <a-menu
@@ -45,19 +45,16 @@
       </a-dropdown>
     </a-layout-header>
 
-    <a-layout-content style="padding: 0 50px; height: 600px;">
-      <router-view />
+    <a-layout-content style="padding: 0 50px; height:100%">
+      <router-view/>
     </a-layout-content>
 
-    <a-layout-footer style="text-align: center">
-      Designed by 钱魏巍
-    </a-layout-footer>
   </a-layout>
 </template>
 
 <script lang="js" setup>
 import {onMounted, ref, watchEffect} from 'vue';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import myAxios from "../plugins/myAxios.js";
 import {message} from "ant-design-vue";
 import {getCurrentUser} from "../services/user.js";
@@ -65,6 +62,7 @@ import {getCurrentUser} from "../services/user.js";
 const selectedKeys = ref([]);
 
 const route = useRoute();
+const router = useRouter();
 const isAdmin = ref(false);
 const user = ref({});
 
@@ -74,6 +72,9 @@ onMounted(async () => {
     if (res) {
       user.value = res;
       isAdmin.value = user.value.userRole === "admin";
+    }
+    if (res.code === 40100) {
+      router.push('/user/login')
     }
   }
 });
@@ -100,11 +101,7 @@ watchEffect(() => {
 
 const userLogout = async () => {
   const res = await myAxios.post('/user/logout');
-  if (res.code === 0) {
-    message.success('退出成功');
-  } else {
-    message.error('退出失败');
-  }
+  message.success('退出成功');
 };
 
 const open = ref(false);

@@ -1,23 +1,24 @@
 <template>
   <div style="display: flex; width: 100%; justify-content: center">
-    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-      <img :src="user.avatarUrl"
-           style="border-radius: 50%; height: 200px; width: 200px"/>
-      <span style="font-size: 30px; color: deepskyblue; margin-top: 15px">我是天才</span>
-    </div>
-    <div style="width: 900px; height: 500px; margin-left: 40px">
-      <div style="border: 1px solid #e8e8e8; width: 100%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); height: 90%; padding: 12px">
+    <div style="width: 900px; height: 300px; margin-left: 40px">
+      <div style="display: flex; justify-content: center; align-items: center">
+        <img :src="user.userAvatar"
+             style="border-radius: 50%; height: 150px; width: 150px"/>
+        <span style="font-size: 30px; color: deepskyblue; margin-top: 15px; margin-left: 20px">{{ user.userName }}</span>
+      </div>
+      <div
+          style="border: 1px solid #e8e8e8; width: 100%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); height: 90%; padding: 12px;">
         <div class="input-div">
           <span class="label-text">
             昵称：
           </span>
-          <a-input status="warning" style="width: 300px;" class="input" v-model:value="user.nickname"/>
+          <a-input status="warning" style="width: 300px;" class="input" v-model:value="user.userName"/>
         </div>
         <div class="input-div">
           <span class="label-text">
-            邮箱：
+            头像链接：
           </span>
-          <a-input status="warning" style="width: 300px;" class="input" v-model:value="user.email"/>
+          <a-input status="warning" style="width: 300px;" class="input" v-model:value="user.userAvatar"/>
         </div>
         <div class="input-div">
           <span class="label-text">
@@ -60,7 +61,7 @@ const loadData = async () => {
   }
 };
 
-onMounted( () => {
+onMounted(() => {
   loadData();
 });
 
@@ -71,7 +72,7 @@ const confirm = async (e) => {
   });
   if (res.code === 0) {
     message.success('修改成功');
-    loadData();
+    window.location.reload();
   } else {
     message.error('修改失败');
   }
@@ -84,14 +85,14 @@ const confirm = async (e) => {
 .input-div {
   display: flex;
   align-items: center; /* 垂直方向居中对齐 */
-  padding: 10px;       /* 给输入框区域一些内边距 */
-  width: 100%;         /* 确保输入框宽度自适应 */
+  padding: 10px; /* 给输入框区域一些内边距 */
+  width: 100%; /* 确保输入框宽度自适应 */
 }
 
 .label-text {
   display: inline-block; /* 确保文字水平排列 */
-  white-space: nowrap;   /* 防止文字换行 */
-  margin-right: 10px;    /* 给文字和输入框间留些空间 */
-  font-size: 16px;       /* 调整字体大小 */
+  white-space: nowrap; /* 防止文字换行 */
+  margin-right: 10px; /* 给文字和输入框间留些空间 */
+  font-size: 16px; /* 调整字体大小 */
 }
 </style>

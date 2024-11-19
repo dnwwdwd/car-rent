@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 12px">
+  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px">
     <a-input-search
         v-model:value="searchText"
         placeholder="请输入品牌搜索车辆"
@@ -10,14 +10,14 @@
         v-model:value="minPrice"
         :min="0"
         :max="100000"
-        :formatter="value => `RMB ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-        :parser="value => value.replace(/\$\s?|(,*)/g, '')"
+        @keydown.enter="onSearch"
     />
     <div style="margin-left: 10px; margin-right: 10px">~</div>
     <a-input-number
         v-model:value="maxPrice"
-        :formatter="value => `RMB ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-        :parser="value => value.replace(/\$\s?|(,*)/g, '')"
+        :min="0"
+        :max="100000"
+        @keydown.enter="onSearch"
     />
   </div>
   <div style="max-width: 80%">
@@ -28,7 +28,7 @@
           <img
               alt="汽车"
               :src="carCategory.imgUrl"
-              style="height: 180px"
+              style="height: 170px"
           />
         </template>
         <a-card-meta :title="carCategory.brand">
@@ -48,8 +48,8 @@ import myAxios from "../plugins/myAxios.js";
 
 const router = useRouter();
 
-const minPrice = ref(null);
-const maxPrice = ref(null);
+const minPrice = ref('');
+const maxPrice = ref('');
 const searchText = ref("");
 const carCategoryList = ref([]);
 

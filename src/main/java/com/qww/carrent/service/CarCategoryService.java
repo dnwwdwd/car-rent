@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qww.carrent.model.entity.CarCategory;
 
 /**
-* @author hejiajun
+* @author qianweiwei
 * @description 针对表【car_category(汽车表)】的数据库操作Service
 * @createDate 2024-10-28 10:20:59
 */
