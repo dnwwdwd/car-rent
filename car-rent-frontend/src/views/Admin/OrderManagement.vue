@@ -36,7 +36,7 @@
   <a-table :columns="columns" :data-source="dataSource" bordered>
     <template #bodyCell="{ column, text, record }">
       <!-- 如果是可编辑字段，则显示编辑框 -->
-      <template v-if="['carId', 'userId', 'totalPrice', 'rentalStartDate', 'rentalEndDate'].includes(column.dataIndex)">
+      <template v-if="['totalPrice', 'rentalStartDate', 'rentalEndDate'].includes(column.dataIndex)">
         <div>
           <a-input
               v-if="editableData[record.key]"
@@ -52,6 +52,38 @@
             </template>
           </template>
         </div>
+      </template>
+
+      <template v-if="column.dataIndex === 'carId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in carIds"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
+      </template>
+
+      <template v-if="column.dataIndex === 'userId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in userIds"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
       </template>
 
       <!-- 如果是 operation 字段，显示编辑、删除、允许租赁、结束租赁等操作按钮 -->
@@ -94,6 +126,11 @@ import {message} from "ant-design-vue";
 // 表格列定义
 const columns = [
   {
+    title: 'id',
+    dataIndex: 'id',
+    width: '10%',
+  },
+  {
     title: '汽车 ID',
     dataIndex: 'carId',
     width: '10%',
@@ -116,6 +153,12 @@ const columns = [
   {
     title: '租期结束日期',
     dataIndex: 'rentalEndDate',
+    width: '10%',
+  },
+
+  {
+    title: '评价',
+    dataIndex: 'evaluation',
     width: '10%',
   },
   {

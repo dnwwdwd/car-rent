@@ -159,8 +159,11 @@ public class UserController {
      * 更新用户
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateUser(@RequestBody User user) {
+    public BaseResponse<Boolean> updateUser(@RequestBody User user, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        if (!user.getId().equals(loginUser.getId()) && !userService.isAdmin(request)) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
         User newUser = new User();
         BeanUtils.copyProperties(user, newUser);
         if (!user.getUserPassword().equals(userService.getById(user.getId()).getUserPassword())) {

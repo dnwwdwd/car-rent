@@ -58,7 +58,7 @@ public class NewsController {
     }
 
     @GetMapping("/list")
-    public BaseResponse<List<NewsVO>> listActivities() {
+    public BaseResponse<List<NewsVO>> listNewses() {
         List<News> activities = newsService.list();
         List<NewsVO> newsVOS = activities.stream().map(news -> {
             NewsVO newsVO = new NewsVO();

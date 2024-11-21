@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 80%; margin: auto;">
+  <div style="max-width: 80%; margin: auto;" v-if="listData && listData.length > 0">
     <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData" bordered>
       <template #renderItem="{ item }">
         <a-list-item key="item.title" @click="router.push(`/order/detail/${item.id}`)">
@@ -27,6 +27,7 @@
       </template>
     </a-list>
   </div>
+  <a-empty description="您还没有任何订单" v-if="!listData || listData.length < 1" style="margin-top: 180px"/>
 </template>
 <script lang="js" setup>
 import {onMounted, ref} from "vue";
@@ -41,7 +42,8 @@ const pagination = {
   onChange: (page) => {
     loadData(page);
   },
-  pageSize: 3,
+  total: 0,
+  pageSize: 4,
 };
 
 const loadData = async (page) => {
@@ -49,7 +51,8 @@ const loadData = async (page) => {
     pageSize: pagination.pageSize,
     current: page,
   });
-  listData.value = res.data;
+  listData.value = res.data.records;
+  pagination.total = res.data.total;
 }
 
 onMounted(async () => {

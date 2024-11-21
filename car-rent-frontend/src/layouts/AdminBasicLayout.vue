@@ -31,6 +31,12 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="5">
+          <router-link to="/admin/commentManagement">
+            <CommentOutlined/>
+            <span>评论管理</span>
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="6">
           <router-link to="/admin/userManagement">
             <user-outlined/>
             <span>用户管理</span>
@@ -44,10 +50,13 @@
           <span style="font-size: 20px; margin-left: 20px; color: #1E90FF">{{ title }}</span>
           <div style="margin-right: 30px">
             <a-dropdown>
-              <a-avatar
-                  shape="circle"
-                  :src="user.userAvatar"
-              />
+              <div>
+                <a-avatar
+                    shape="circle"
+                    :src="user.userAvatar"
+                />
+                <span style="margin-left: 3px">{{user.userName}}</span>
+              </div>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
@@ -115,8 +124,11 @@ watchEffect(() => {
     case '/admin/newsManagement':
       selectedKeys.value = ['4'];
       break;
-    case '/admin/userManagement':
+    case '/admin/commentManagement':
       selectedKeys.value = ['5'];
+      break;
+    case '/admin/userManagement':
+      selectedKeys.value = ['6'];
       break;
     default:
       // 如果没有匹配到任何菜单项，清空选中项
@@ -128,7 +140,6 @@ router.beforeEach((to, from) => {
   routes.forEach(route => {
     if (to.path === route.path) {
       title.value = route.title;
-      console.log(route.title)
     }
   });
 });

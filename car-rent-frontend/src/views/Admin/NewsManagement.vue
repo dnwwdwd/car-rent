@@ -14,7 +14,7 @@
   </a-modal>
   <a-table :columns="columns" :data-source="dataSource" bordered>
     <template #bodyCell="{ column, text, record }">
-      <template v-if="['userId', 'title', 'imgUrl', 'description', 'content'].includes(column.dataIndex)">
+      <template v-if="['title', 'imgUrl', 'description', 'content'].includes(column.dataIndex)">
         <div>
           <a-input
               v-if="editableData[record.key]"
@@ -30,6 +30,21 @@
             </template>
           </template>
         </div>
+      </template>
+      <template v-if="column.dataIndex === 'userId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in userIds"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
       </template>
       <!-- 对 operation 字段显示编辑/保存/取消/删除操作 -->
       <template v-else-if="column.dataIndex === 'operation'">
@@ -61,6 +76,11 @@ import {message} from "ant-design-vue";
 
 // 表格列定义
 const columns = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    width: '10%',
+  },
   {
     title: '创建人 ID',
     dataIndex: 'userId',
@@ -95,6 +115,9 @@ const columns = [
 
 // 响应式数据源
 const dataSource = ref([]);
+
+const userIds = ref([]);
+
 const editableData = reactive({});
 
 const open = ref(false);
@@ -173,6 +196,10 @@ const loadData = async () => {
       ...item,
       key: index, // 添加key属性，值从0开始递增
     }));
+  }
+  const result = await myAxios.get('/user/list/id');
+  if (result.code === 0) {
+    userIds.value = result.data;
   }
 };
 

@@ -14,6 +14,8 @@ import NewsDetail from "../views/News/NewsDetail.vue";
 import CarCategoryManagement from "../views/Admin/CarCategoryManagement.vue";
 import UserManagement from "../views/Admin/UserManagement.vue";
 import OrderManagement from "../views/Admin/OrderManagement.vue";
+import MyCarStar from "../views/User/MyCarStar.vue";
+import CommentManagement from "../views/Admin/CommentManagement.vue";
 
 const routes = [
     {path: '/', component: Index, meta: { layout: 'basic' }},
@@ -25,12 +27,14 @@ const routes = [
     {path: '/news', component: News, meta: { layout: 'basic' }},
     {path: '/news/detail/:id', component: NewsDetail, meta: { layout: 'basic' }},
     {path: '/user/setting', component: UserSetting, meta: { layout: 'basic' }},
+    {path: '/my/car/star', component: MyCarStar, meta: { layout: 'basic' }},
     {path: '/user/login', component: LoginPage, meta: { layout: 'basic' }},
     {path: '/user/register', component: RegisterPage, meta: { layout: 'basic' }},
     {path: '/admin/carRentManagement', title: '汽车管理', component: CarRentManagement, meta: { layout: 'admin' }},
     {path: '/admin/carCategoryManagement', title: '汽车分类管理', component: CarCategoryManagement, meta: { layout: 'admin' }},
     {path: '/admin/newsManagement', title: '汽车管理', component: NewsManagement, meta: { layout: 'admin' }},
     {path: '/admin/orderManagement', title: '订单管理', component: OrderManagement, meta: { layout: 'admin' }},
+    {path: '/admin/commentManagement', title: '评论管理', component: CommentManagement, meta: { layout: 'admin' }},
     {path: '/admin/userManagement', title: '用户管理', component: UserManagement, meta: { layout: 'admin' }},
 ]
 

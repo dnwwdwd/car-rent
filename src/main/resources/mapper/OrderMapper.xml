@@ -12,6 +12,7 @@
             <result property="rentalStartDate" column="rentalStartDate" jdbcType="TIMESTAMP"/>
             <result property="rentalEndDate" column="rentalEndDate" jdbcType="TIMESTAMP"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="evaluation" column="evaluation" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>

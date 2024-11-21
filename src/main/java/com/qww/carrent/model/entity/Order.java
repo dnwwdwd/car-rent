@@ -53,6 +53,8 @@ public class Order implements Serializable {
      */
     private Integer status;
 
+    private String evaluation;
+
     /**
      * 创建时间
      */

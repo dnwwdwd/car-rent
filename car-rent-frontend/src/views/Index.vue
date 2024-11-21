@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px">
+  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 12px">
     <a-input-search
         v-model:value="searchText"
         placeholder="请输入品牌搜索车辆"
@@ -20,7 +20,7 @@
         @keydown.enter="onSearch"
     />
   </div>
-  <div style="max-width: 80%">
+  <div style="max-width: 80%; margin-left: 180px">
     <a-flex wrap="wrap" gap="large">
       <a-card hoverable style="width: 220px;" v-for="carCategory in carCategoryList"
               @click="router.push(`/car/category/${carCategory.id}`)">

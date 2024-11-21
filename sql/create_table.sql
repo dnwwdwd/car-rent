@@ -91,6 +91,19 @@ create table car_rent.car
     comment '汽车详情表';
 
 
+create table car_rent.comment
+(
+    id         int auto_increment comment 'id'
+        primary key,
+    userId     int                                null comment '用户id',
+    newsId int                                null comment '资讯id',
+    content    varchar(512)                       null comment '评论内容',
+    createTIme datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间'
+)
+    comment '资讯的评论表';
+
+
 INSERT INTO car_rent.user (id, userAccount, userPassword, userName, userAvatar, phone, userRole, address, createTime, updateTime, isDelete) VALUES (1, 'admin', '85a3c0ee19def3570aa9250cdb982fa7', '钱魏巍', 'https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/c22d7a8afc234af78073ee4b2d1cf76f~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg6Zuq6I23:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNjcxMTY0MDc3NzA1NTY4In0%3D&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1730190943&x-orig-sign=W%2BNKrc2iXAgm9STjM55Ta6AcRk8%3D', '124456344', 'admin', '淮安', '2024-10-28 13:24:05', '2024-10-31 13:20:42', 0);
 INSERT INTO car_rent.user (id, userAccount, userPassword, userName, userAvatar, phone, userRole, address, createTime, updateTime, isDelete) VALUES (2, 'qianweiwei', '85a3c0ee19def3570aa9250cdb982fa7', '钱魏巍', 'https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/c22d7a8afc234af78073ee4b2d1cf76f~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAg6Zuq6I23:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNjcxMTY0MDc3NzA1NTY4In0%3D&rk3s=e9ecf3d6&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1730190943&x-orig-sign=W%2BNKrc2iXAgm9STjM55Ta6AcRk8%3D', '18329424', 'user', '江苏省淮安市', '2024-10-29 16:28:29', '2024-10-29 17:19:32', 0);
 

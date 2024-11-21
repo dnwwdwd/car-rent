@@ -36,7 +36,7 @@ const pagination = {
   onChange: (page) => {
     loadData(page);
   },
-  pageSize: 3,
+  pageSize: 4,
 };
 
 const loadData = async (page) => {

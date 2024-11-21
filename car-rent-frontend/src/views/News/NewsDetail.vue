@@ -1,14 +1,14 @@
 <template>
   <div style="max-width: 80%; display: flex; justify-content: center; align-items: center; margin: auto; padding: 20px">
-    <div style="width: 320px; ">
+    <div style="width: 220px; ">
       <a-image
-          :width="290"
-          :height="400"
+          :width="200"
+          :height="300"
           :src="newsVO.imgUrl"
           style="border-radius: 6%"
       />
     </div>
-    <div style="width: 60%; height: 450px; margin: 20px; border: 1px solid #e8e8e8;
+    <div style="width: 60%; height: 300px; border: 1px solid #e8e8e8;
     border-radius: 5px; background-color: #f9f9f9; box-shadow: 8px 8px 8px rgba(173, 216, 230, 0.5);">
       <div style="padding: 20px; display: flex;">
         <a-avatar :src="newsVO.user.userAvatar"/>
@@ -21,27 +21,84 @@
       </div>
     </div>
   </div>
+  <div style="width: 800px; margin: 0 auto; margin-top: 20px">
+    <div style="display: flex; justify-content: center; align-items: center">
+      <div>
+        <img :src="currentUser.userAvatar" width="40px" height="40px" style="border-radius: 50%; margin: 0 auto"/>
+        <a-input placeholder="请输入评论（按住回车发送）" style="width: 240px; margin-left: 12px" v-model:value="content"
+                 @keydown.enter="addComment"/>
+      </div>
+    </div>
+    <a-divider>评论区</a-divider>
+    <div v-if="commentList && commentList.length > 0" style="margin-left: 270px">
+      <a-comment v-for="comment in commentList">
+        <template #author>{{ comment.userVO.userName }}</template>
+        <template #avatar>
+          <a-avatar :src="comment.userVO.userAvatar" alt="匿名"/>
+        </template>
+        <template #content>
+          <p>
+            {{ comment.content }}
+          </p>
+        </template>
+        <template #datetime>
+          <span>{{ comment.createTIme }}</span>
+        </template>
+      </a-comment>
+    </div>
+    <a-empty description="暂无任何评论" v-if="!commentList || commentList.length < 1"/>
+  </div>
 </template>
 
 <script setup lang="js">
 import {onMounted, ref} from "vue";
 import myAxios from "../../plugins/myAxios.js";
 import {useRoute} from "vue-router";
+import {getCurrentUser} from "../../services/user.js";
+import {message} from "ant-design-vue";
 
 const route = useRoute();
 
 const id = route.params.id;
 
+const currentUser = ref({});
+const content = ref('');
+const commentList = ref([]);
+
 const newsVO = ref({
   user: {}
 });
 
-onMounted(async () => {
+const loadData = async () => {
   const res = await myAxios.get(`/news/detail/${id}`);
   if (res.data) {
     newsVO.value = res.data;
   }
+  currentUser.value = await getCurrentUser();
+  const result = await myAxios.get('/comment/list', {
+    params: {
+      newsId: id
+    }
+  });
+  if (result.code === 0) {
+    commentList.value = result.data;
+  }
+};
+
+onMounted(async () => {
+  loadData();
 });
+
+const addComment = async () => {
+  const res = await myAxios.post('/comment/add', {
+    content: content.value,
+    newsId: id
+  });
+  if (res.code === 0) {
+    loadData();
+    message.success('评论发表成功');
+  }
+};
 
 </script>
 

@@ -57,6 +57,11 @@ import {message} from "ant-design-vue";
 // 表格列定义
 const columns = [
   {
+    title: 'id',
+    dataIndex: 'id',
+    width: '10%',
+  },
+  {
     title: '品牌',
     dataIndex: 'brand',
     width: '10%',

@@ -25,6 +25,8 @@ public class OrderVO implements Serializable {
      */
     private Integer userId;
 
+    private String evaluation;
+
     /**
      * 总价格
      */

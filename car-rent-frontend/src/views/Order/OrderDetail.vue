@@ -32,7 +32,11 @@
       <a-progress :stroke-color="{'0%': '#108ee9','100%': '#87d068',}" status="active" style="margin-top: 12px"
                   type="line" :percent="percent" :format="percent => `${percent} %`"/>
       <div style="display: flex; justify-content: flex-end; margin-top: 10px">
-        <a-button v-if="orderVO.status === 1" type="primary">结束租赁</a-button>
+        <a-button v-if="orderVO.status === 1" type="primary" @click="endRental">结束租赁</a-button>
+        <a-button v-if="orderVO.status === 2" type="primary" @click="evaluate">评价</a-button>
+        <a-modal v-model:open="open" title="租车评价" @ok="handleOk" cancelText="取消" okText="确认">
+          <a-input placeholder="请输入评价" v-model:value="formModal.evaluation"/>
+        </a-modal>
       </div>
     </div>
   </div>
@@ -42,6 +46,7 @@
 import {onMounted, ref} from "vue";
 import myAxios from "../../plugins/myAxios.js";
 import {useRoute} from "vue-router";
+import {message} from "ant-design-vue";
 
 const route = useRoute();
 const id = route.params.id;
@@ -51,12 +56,17 @@ const orderVO = ref({
   carVO: {},
 });
 
+const open = ref(false);
+
 const watermarkContent = ref('');
+
+const formModal = ref({
+  evaluation: '',
+});
 
 const percent = ref(0);
 
-onMounted(async () => {
-  console.log('发送请求了');
+const loadData = async () => {
   const res = await myAxios.get(`/order/detail/${id}`);
   if (res.data) {
     orderVO.value = res.data;
@@ -67,19 +77,56 @@ onMounted(async () => {
         watermarkContent.value = '等待商家交接';
         break;
       case 1:
-        percent.value = 75;
+        percent.value = 50;
         watermarkContent.value = '订单进行中';
         break;
       case 2:
+        percent.value = 75;
+        watermarkContent.value = '待评价';
+        break;
+      case 3:
         percent.value = 100;
         watermarkContent.value = '订单已结束';
         break;
       default:
         percent.value = 0;
-        watermarkContent.value = '等待商家交接';
+        watermarkContent.value = '';
     }
   }
+};
+
+onMounted(async () => {
+  loadData();
 });
+
+const endRental = async () => {
+  const res = await myAxios.post('/order/endRental', {
+    id: id,
+  });
+  if (res.code === 0) {
+    loadData();
+    message.success('操作成功');
+  } else {
+    message.error('操作失败');
+  }
+};
+
+const evaluate = () => {
+  open.value = true;
+};
+
+const handleOk = async () => {
+  const res = await myAxios.post('/order/evaluate', {
+    id: id,
+    evaluation: formModal.value.evaluation
+  });
+  if (res.code === 0) {
+    open.value = false;
+    message.info('评价成功');
+    loadData();
+  }
+};
+
 </script>
 
 <style scoped>

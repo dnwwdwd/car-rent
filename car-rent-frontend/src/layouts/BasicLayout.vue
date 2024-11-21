@@ -22,13 +22,19 @@
         <a-menu-item key="4">
           <router-link to="/news">资讯</router-link>
         </a-menu-item>
+        <a-menu-item key="5">
+          <router-link to="/my/car/star">我的收藏</router-link>
+        </a-menu-item>
       </a-menu>
 
       <a-dropdown style="margin-left: auto">
-        <a-avatar
-            shape="circle"
-            :src="user.userAvatar"
-        />
+        <div>
+          <a-avatar
+              shape="circle"
+              :src="user.userAvatar"
+          />
+          <span style="margin-left: 3px">{{user.userName}}</span>
+        </div>
         <template #overlay>
           <a-menu>
             <a-menu-item>
@@ -94,6 +100,9 @@ watchEffect(() => {
     case '/news':
       selectedKeys.value = ['4'];
       break;
+    case '/my/car/star':
+      selectedKeys.value = ['5'];
+      break;
     default:
       selectedKeys.value = [];
   }
@@ -104,52 +113,6 @@ const userLogout = async () => {
   message.success('退出成功');
 };
 
-const open = ref(false);
-
-const petForumOpen = ref(false);
-
-const formModal = ref({
-  petName: '',
-  age: '',
-  sex: '',
-  state: '',
-  isSterilized: '',
-  isVaccination: '',
-  description: '',
-  type: '',
-  avatarUrl: '',
-  variety: '',
-});
-
-const petForumModal = ref({
-  name: '',
-  imgUrl: '',
-  description: '',
-});
-
-const showModal = () => {
-  open.value = true;
-};
-
-const showPetForumModal = () => {
-  petForumOpen.value = true;
-};
-
-const handleOk = async () => {
-  const res = await myAxios.post('/donate/pet', formModal.value);
-  if (res.code === 0) {
-    open.value = false;
-    window.location.reload();
-  }
-};
-
-const handlePetForumOk = async () => {
-  const res = await myAxios.post('/pet/forum/add', petForumModal.value);
-  if (res.code === 0) {
-    petForumOpen.value = false;
-    window.location.reload();
-  }
-};
 
 </script>
 

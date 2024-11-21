@@ -1,12 +1,11 @@
 package com.qww.carrent.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qww.carrent.annotation.AuthCheck;
-import com.qww.carrent.common.BaseResponse;
-import com.qww.carrent.common.DeleteRequest;
-import com.qww.carrent.common.PageRequest;
-import com.qww.carrent.common.ResultUtils;
+import com.qww.carrent.common.*;
 import com.qww.carrent.constant.UserConstant;
+import com.qww.carrent.exception.BusinessException;
 import com.qww.carrent.model.entity.Car;
 import com.qww.carrent.model.entity.CarCategory;
 import com.qww.carrent.model.entity.Order;
@@ -85,20 +84,30 @@ public class OrderController {
     }
 
     @PostMapping("/list")
-    public BaseResponse<List<OrderVO>> listOrders(@RequestBody PageRequest pageRequest,
+    public BaseResponse<Page<OrderVO>> listOrders(@RequestBody PageRequest pageRequest,
                                                   HttpServletRequest request) {
-        Page<Order> orderPage = orderService.page(new Page<>(pageRequest.getCurrent(), pageRequest.getPageSize()));
+        User loginUser = userService.getLoginUser(request);
+        Integer userId = loginUser.getId();
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userId);
+        queryWrapper.orderByDesc("createTime"); // 确保排序规则
+        Page<Order> orderPage = orderService.page(
+                new Page<>(pageRequest.getCurrent(), pageRequest.getPageSize()), queryWrapper
+        );
+        // 转换 Order 到 OrderVO
         List<OrderVO> orderVOList = orderPage.getRecords().stream().map(order -> {
             OrderVO orderVO = new OrderVO();
             BeanUtils.copyProperties(order, orderVO);
             CarVO carVO = carService.getCarDetailById(order.getCarId());
             orderVO.setCarVO(carVO);
-            orderVO.setUser(userService.getLoginUser(request));
+            orderVO.setUser(loginUser);
             orderVO.setRentalStartDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getRentalStartDate()));
             orderVO.setRentalEndDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getRentalEndDate()));
             return orderVO;
         }).collect(Collectors.toList());
-        return ResultUtils.success(orderVOList);
+        Page<OrderVO> resultPage = new Page<>(orderPage.getCurrent(), orderPage.getSize(), orderPage.getTotal());
+        resultPage.setRecords(orderVOList);
+        return ResultUtils.success(resultPage);
     }
 
     @GetMapping("/list")
@@ -149,7 +158,7 @@ public class OrderController {
     public BaseResponse<Boolean> endRental(@RequestBody DeleteRequest deleteRequest) {
         Integer id = deleteRequest.getId();
         Order order = orderService.getById(id);
-        // 订单状态改为已处理
+        // 订单状态改为待评价
         order.setStatus(2);
         boolean b = orderService.updateById(order);
         Car car = carService.getById(order.getCarId());
@@ -174,6 +183,21 @@ public class OrderController {
         orderVO.setRentalEndDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getRentalEndDate()));
         orderVO.setUser(userService.getById(order.getUserId()));
         return ResultUtils.success(orderVO);
+    }
+
+    @PostMapping("/evaluate")
+    public BaseResponse<Boolean> evaluate(@RequestBody Order order, HttpServletRequest request) {
+        String evaluation = order.getEvaluation();
+        Integer id = order.getId();
+        if (StringUtils.isEmpty(evaluation) || id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (orderService.getById(id) == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单不存在");
+        }
+        order.setStatus(3);
+        boolean b = orderService.updateById(order);
+        return ResultUtils.success(b);
     }
 
 }

@@ -22,7 +22,7 @@
   </a-modal>
   <a-table :columns="columns" :data-source="dataSource" bordered>
     <template #bodyCell="{ column, text, record }">
-      <template v-if="['carCategoryId', 'carNumber', 'mileage', 'quality', 'imgUrl', 'rentPrice', 'color'].includes(column.dataIndex)">
+      <template v-if="['carNumber', 'mileage', 'quality', 'imgUrl', 'rentPrice', 'color'].includes(column.dataIndex)">
         <div>
           <a-input
               v-if="editableData[record.key]"
@@ -38,6 +38,22 @@
             </template>
           </template>
         </div>
+      </template>
+
+      <template v-if="column.dataIndex === 'carCategoryId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in idList"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
       </template>
 
       <!-- 对 operation 字段显示编辑/保存/取消/删除操作 -->
@@ -69,6 +85,11 @@ import {message} from "ant-design-vue";
 
 // 表格列定义
 const columns = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    width: '10%',
+  },
   {
     title: '汽车分类 ID',
     dataIndex: 'carCategoryId',

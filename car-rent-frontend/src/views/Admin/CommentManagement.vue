@@ -1,24 +1,7 @@
 <template>
-  <a-button type="primary" class="editable-add-btn" style="margin-bottom: 8px; margin-top: 12px" @click="handleAdd">
-    添加用户
-  </a-button>
-  <a-modal v-model:open="open" title="添加用户" @ok="handleOk" cancelText="取消" okText="确认添加">
-    账号：
-    <a-input v-model:value="formModal.userAccount" class="a-input"/>
-    密码：
-    <a-input v-model:value="formModal.userPassword" class="a-input"/>
-    昵称：
-    <a-input v-model:value="formModal.userName" class="a-input"/>
-    手机号：
-    <a-input v-model:value="formModal.phone" class="a-input"/>
-    家庭住址：
-    <a-input v-model:value="formModal.address" class="a-input"/>
-    头像：
-    <a-input v-model:value="formModal.userAvatar" class="a-input"/>
-  </a-modal>
   <a-table :columns="columns" :data-source="dataSource" bordered>
     <template #bodyCell="{ column, text, record }">
-      <template v-if="['userAccount', 'userPassword' ,'userName', 'userAvatar', 'phone', 'address'].includes(column.dataIndex)">
+      <template v-if="['content'].includes(column.dataIndex)">
         <div>
           <a-input
               v-if="editableData[record.key]"
@@ -26,14 +9,39 @@
               style="margin: -5px 0"
           />
           <template v-else>
-            <template v-if="column.dataIndex === 'userAvatar'">
-              <a-image :src="text" :height="150" :width="150"/>
-            </template>
-            <template v-else>
               {{ text }}
-            </template>
           </template>
         </div>
+      </template>
+      <template v-if="column.dataIndex === 'userId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in userIds"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
+      </template>
+      <template v-if="column.dataIndex === 'newsId'">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="width: 120px; margin-top: 10px"
+        >
+          <a-select-option
+              v-for="id in newsIds"
+              :key="id"
+              :value="id"
+          >
+            {{ id }}
+          </a-select-option>
+        </a-select>
       </template>
       <!-- 对 operation 字段显示编辑/保存/取消/删除操作 -->
       <template v-else-if="column.dataIndex === 'operation'">
@@ -71,34 +79,19 @@ const columns = [
     width: '10%',
   },
   {
-    title: '账号',
-    dataIndex: 'userAccount',
+    title: '评论者 ID',
+    dataIndex: 'userId',
     width: '10%',
   },
   {
-    title: '密码',
-    dataIndex: 'userPassword',
+    title: '论坛 ID',
+    dataIndex: 'newsId',
     width: '10%',
   },
   {
-    title: '昵称',
-    dataIndex: 'userName',
-    width: '10%',
-  },
-  {
-    title: '手机号',
-    dataIndex: 'phone',
-    width: '10%',
-  },
-  {
-    title: '家庭住址',
-    dataIndex: 'address',
-    width: '10%',
-  },
-  {
-    title: '头像',
-    dataIndex: 'userAvatar',
-    width: '10%',
+    title: '评论内容',
+    dataIndex: 'content',
+    width: '20%',
   },
   {
     title: '操作',
@@ -111,7 +104,9 @@ const columns = [
 const dataSource = ref([]);
 const editableData = reactive({});
 
-const open = ref(false);
+const newsIds = ref([]);
+
+const userIds = ref([]);
 
 // 编辑函数，点击编辑按钮时调用
 const edit = (key) => {
@@ -122,9 +117,9 @@ const save = async (key) => {
   // 编辑保存后的新值
   const editedData = editableData[key];
   // 请求后端更新数据
-  const res = await myAxios.post('/user/update', editedData);
+  const res = await myAxios.post('/comment/update', editedData);
   if (res.code === 0) {
-    loadData();
+    Object.assign(dataSource.value.find(item => item.key === key), editedData);
     message.success('修改成功');
   } else {
     message.error('修改失败');
@@ -143,7 +138,7 @@ const onDelete = async (key) => {
   const item = dataSource.value.find(item => item.key === key);
   console.log(item.id);
   // 请求后端删除数据
-  const res = await myAxios.post('/user/delete', {
+  const res = await myAxios.post('/comment/delete', {
     id: item.id,
   });
   if (res.code === 0) {
@@ -154,40 +149,21 @@ const onDelete = async (key) => {
   }
 };
 
-const formModal = ref({
-  userAccount: '',
-  userPassword: '',
-  userName: '',
-  userAvatar: '',
-  phone: '',
-  address: '',
-});
-
-// 添加表格项
-const handleAdd = () => {
-  open.value = true;
-};
-
-const handleOk = async () => {
-  // 请求后端，添加表格项
-  const result = await myAxios.post('/user/add', formModal.value);
-  if (result.code == 0) {
-    message.success('添加成功');
-    open.value = false;
-  } else {
-    message.error('添加失败');
-  }
-  // 重新加载表格数据
-  loadData();
-};
-
 const loadData = async () => {
-  const res = await myAxios.get('/user/list');
+  const res = await myAxios.get('/comment/list/all');
   if (res.code === 0) {
     dataSource.value = res.data.map((item, index) => ({
       ...item,
       key: index, // 添加key属性，值从0开始递增
     }));
+  }
+  const resp = await myAxios.get('/user/list/id');
+  if (resp.code === 0) {
+    userIds.value = resp.data;
+  }
+  const result = await myAxios.get('/news/list');
+  if (result.code === 0) {
+    newsIds.value = result.data.map(item => item.id);
   }
 };
 
