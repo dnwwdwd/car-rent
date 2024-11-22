@@ -2,7 +2,7 @@
   <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 12px">
     <a-input-search
         v-model:value="searchText"
-        placeholder="请输入品牌搜索车辆"
+        placeholder="请输入品牌或型号搜索车辆"
         style="width: 400px;"
         @search="onSearch"/>
     <span style="margin-left: 12px">日租价格：</span>
@@ -39,6 +39,7 @@
       </a-card>
     </a-flex>
   </div>
+  <a-empty description="没有符合条件的车辆" v-if="!carCategoryList || carCategoryList.length < 1" style="margin-top: 180px"/>
 </template>
 
 <script setup lang="js">
