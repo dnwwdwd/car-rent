@@ -1,4 +1,5 @@
 package com.qww.carrent.controller;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qww.carrent.common.BaseResponse;
 import com.qww.carrent.common.DeleteRequest;
 import com.qww.carrent.common.ErrorCode;
@@ -29,9 +30,6 @@ public class NewsController {
 
     @PostMapping("/add")
     public BaseResponse<Integer> addNews(@RequestBody News news, HttpServletRequest request) {
-        if (!userService.isAdmin(request)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
         User loginUser = userService.getLoginUser(request);
         news.setUserId(loginUser.getId());
         newsService.save(news);
@@ -59,7 +57,9 @@ public class NewsController {
 
     @GetMapping("/list")
     public BaseResponse<List<NewsVO>> listNewses() {
-        List<News> activities = newsService.list();
+        QueryWrapper<News> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderBy(true, false, "createTime");
+        List<News> activities = newsService.list(queryWrapper);
         List<NewsVO> newsVOS = activities.stream().map(news -> {
             NewsVO newsVO = new NewsVO();
             newsVO.setUser(userService.getById(news.getUserId()));

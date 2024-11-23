@@ -27,6 +27,20 @@
         </a-menu-item>
       </a-menu>
 
+      <a-button class="editable-add-btn" style="margin-bottom: 8px; margin-right: 28px; margin-top: 12px; color: #4290FF" @click="handleAdd">
+        发布资讯
+      </a-button>
+      <a-modal v-model:open="open" title="发布资讯" @ok="handleOk" cancelText="取消" okText="确认添加">
+        资讯名称：
+        <a-input v-model:value="formModal.title" class="a-input"/>
+        资讯描述：
+        <a-input v-model:value="formModal.description" class="a-input"/>
+        图片：
+        <a-input v-model:value="formModal.imgUrl" class="a-input"/>
+        资讯内容：
+        <a-input v-model:value="formModal.content" class="a-input"/>
+      </a-modal>
+
       <a-dropdown style="margin-left: auto">
         <div>
           <a-avatar
@@ -72,6 +86,16 @@ const router = useRouter();
 const isAdmin = ref(false);
 const user = ref({});
 
+const open = ref(false);
+
+const formModal = ref({
+  userId: '',
+  title: '',
+  description: '',
+  imgUrl: '',
+  content: '',
+});
+
 onMounted(async () => {
   if (!route.path.includes('/user/login') && !route.path.includes('/user/register')) {
     const res = await getCurrentUser();
@@ -113,6 +137,23 @@ const userLogout = async () => {
   message.success('退出成功');
 };
 
+const handleAdd = () => {
+  open.value = true;
+};
+
+const handleOk = async () => {
+  // 请求后端，添加表格项
+  const result = await myAxios.post('/news/add', formModal.value);
+  if (result.code === 0) {
+    message.success('添加成功');
+    open.value = false;
+    window.location.reload();
+  } else {
+    message.error('添加失败');
+  }
+  // 重新加载表格数据
+  loadData();
+};
 
 </script>
 

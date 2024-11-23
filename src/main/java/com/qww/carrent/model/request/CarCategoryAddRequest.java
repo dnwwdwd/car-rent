@@ -3,6 +3,7 @@ package com.qww.carrent.model.request;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class CarCategoryAddRequest implements Serializable {
@@ -31,6 +32,8 @@ public class CarCategoryAddRequest implements Serializable {
      * 库存数量
      */
     private Integer stock;
+
+    private BigDecimal averagePrice;
 
     private static final long serialVersionUID = 1L;
 

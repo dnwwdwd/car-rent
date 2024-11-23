@@ -8,7 +8,7 @@
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
         <a-menu-item key="1">
           <router-link to="/admin/carRentManagement">
-            <RedditOutlined/>
+            <CarOutlined/>
             <span>汽车管理</span>
           </router-link>
         </a-menu-item>
@@ -26,7 +26,7 @@
         </a-menu-item>
         <a-menu-item key="4">
           <router-link to="/admin/newsManagement">
-            <CommentOutlined/>
+            <ContainerOutlined/>
             <span>资讯管理</span>
           </router-link>
         </a-menu-item>
@@ -55,7 +55,7 @@
                     shape="circle"
                     :src="user.userAvatar"
                 />
-                <span style="margin-left: 3px">{{user.userName}}</span>
+                <span style="margin-left: 3px">{{ user.userName }}</span>
               </div>
               <template #overlay>
                 <a-menu>
@@ -85,12 +85,12 @@
 </template>
 <script lang="js" setup>
 import {
-  RedditOutlined,
-  VideoCameraAddOutlined,
-  DesktopOutlined,
-  UserOutlined,
-  FormOutlined,
+  CarOutlined,
   CommentOutlined,
+  DesktopOutlined,
+  FormOutlined,
+  UserOutlined,
+  ContainerOutlined
 } from '@ant-design/icons-vue';
 import {onMounted, ref, watchEffect} from 'vue';
 import {useRoute, useRouter} from "vue-router";

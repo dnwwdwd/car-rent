@@ -23,8 +23,8 @@
         <h3 style="font-size: 18px">颜色：{{ carVO.color }}</h3>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 18px">是否已出租：{{ carVO.status === 1 ? '是' : '否' }}</h3>
-          <a-button v-if="!isStarred" @click="addCarStar" style="margin-left: 180px; color: #1E90FF">收藏</a-button>
-          <a-button v-if="isStarred" @click="deleteCarStar" style="margin-left: 180px; color: #1E90FF">取消收藏</a-button>
+          <a-button v-if="!isStarred" @click="addCarStar" style="margin-left: 220px; color: #1E90FF">收藏</a-button>
+          <a-button v-if="isStarred" @click="deleteCarStar" style="margin-left: 220px; color: #1E90FF">取消收藏</a-button>
           <a-button v-if="carVO.status === 0" style="color: #1E90FF" @click="showModal">我要租车</a-button>
           <a-modal v-model:open="open" title="申请领养" :confirm-loading="confirmLoading" @ok="handleOk" ok-text="确认"
                    cancel-text="取消">

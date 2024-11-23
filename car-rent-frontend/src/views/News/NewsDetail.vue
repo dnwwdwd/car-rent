@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 80%; display: flex; justify-content: center; align-items: center; margin: auto; padding: 20px">
-    <div style="width: 220px; ">
+    <div style="width: 220px;">
       <a-image
           :width="200"
           :height="300"
@@ -8,8 +8,17 @@
           style="border-radius: 6%"
       />
     </div>
-    <div style="width: 60%; height: 300px; border: 1px solid #e8e8e8;
-    border-radius: 5px; background-color: #f9f9f9; box-shadow: 8px 8px 8px rgba(173, 216, 230, 0.5);">
+    <div
+        :style="{
+        width: '60%',
+        height: computedContentHeight + 'px',
+        border: '1px solid #e8e8e8',
+        borderRadius: '5px',
+        backgroundColor: '#f9f9f9',
+        boxShadow: '8px 8px 8px rgba(173, 216, 230, 0.5)',
+        overflowY: contentOverflow ? 'auto' : 'hidden'
+      }"
+    >
       <div style="padding: 20px; display: flex;">
         <a-avatar :src="newsVO.user.userAvatar"/>
         <span style="font-size: 24px; margin-left: 10px">{{ newsVO.title }}</span>
@@ -51,11 +60,11 @@
 </template>
 
 <script setup lang="js">
-import {onMounted, ref} from "vue";
+import { onMounted, ref, computed } from "vue";
 import myAxios from "../../plugins/myAxios.js";
-import {useRoute} from "vue-router";
-import {getCurrentUser} from "../../services/user.js";
-import {message} from "ant-design-vue";
+import { useRoute } from "vue-router";
+import { getCurrentUser } from "../../services/user.js";
+import { message } from "ant-design-vue";
 
 const route = useRoute();
 
@@ -66,9 +75,11 @@ const content = ref('');
 const commentList = ref([]);
 
 const newsVO = ref({
-  user: {}
+  user: {},
+  content: ''  // Initialize content as an empty string to prevent undefined errors
 });
 
+// 加载数据
 const loadData = async () => {
   const res = await myAxios.get(`/news/detail/${id}`);
   if (res.data) {
@@ -85,21 +96,40 @@ const loadData = async () => {
   }
 };
 
+// 计算内容区域的高度
+const computedContentHeight = computed(() => {
+  // Ensure content exists before calculating length
+  const contentLength = newsVO.value.content ? newsVO.value.content.length : 0;
+  if (contentLength < 100) {
+    return 300; // 小内容，不需要滚动
+  } else if (contentLength < 500) {
+    return 400; // 中等内容
+  } else {
+    return 500; // 长内容，需要更大的高度并且滚动
+  }
+});
+
+// 判断是否需要滚动条
+const contentOverflow = computed(() => {
+  return newsVO.value.content && newsVO.value.content.length > 500; // 如果内容较长则需要显示滚动条
+});
+
 onMounted(async () => {
   loadData();
 });
 
+// 添加评论
 const addComment = async () => {
   const res = await myAxios.post('/comment/add', {
     content: content.value,
     newsId: id
   });
   if (res.code === 0) {
+    content.value = '';
     loadData();
     message.success('评论发表成功');
   }
 };
-
 </script>
 
 <style scoped>

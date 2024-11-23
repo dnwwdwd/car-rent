@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 80%; margin-left: 180px">
+  <div style="max-width: 80%; margin-left: 220px">
     <a-flex wrap="wrap" gap="large">
       <a-card hoverable style="width: 220px;" v-for="car in carList" @click="router.push(`/car/rent/detail/${car.id}`)">
         <template #cover>

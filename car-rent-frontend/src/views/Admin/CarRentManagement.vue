@@ -198,9 +198,10 @@ const handleAdd = () => {
 const handleOk = async () => {
     // 请求后端，添加表格项
     const result = await myAxios.post('/car/add', formModal.value);
-    if (result.code == 0) {
+    if (result.code === 0) {
       message.success('添加成功');
       open.value = false;
+      window.location.reload();
     } else {
       message.error('添加失败');
     }
