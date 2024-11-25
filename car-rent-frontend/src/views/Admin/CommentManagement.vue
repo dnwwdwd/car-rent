@@ -84,7 +84,7 @@ const columns = [
     width: '10%',
   },
   {
-    title: '论坛 ID',
+    title: '资讯 ID',
     dataIndex: 'newsId',
     width: '10%',
   },
