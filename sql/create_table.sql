@@ -109,7 +109,7 @@ create table car_rent.user
     userAccount  varchar(256)                                                                                                     not null comment '账号',
     userPassword varchar(512)                                                                                                     not null comment '密码',
     userName     varchar(256)                                                                                                     null comment '用户昵称',
-    userAvatar   varchar(1024) default 'https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/image-20241119111441579.png' not null comment '用户头像',
+    userAvatar   varchar(1024) default 'https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/20241125121434.jpg' not null comment '用户头像',
     phone        varchar(32)                                                                                                      null comment '手机号码',
     userRole     varchar(256)  default 'user'                                                                                     not null comment '用户角色：user/admin/ban',
     address      varchar(64)                                                                                                      null comment '家庭住址',
