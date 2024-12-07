@@ -120,7 +120,6 @@ create table car_rent.user
     comment '用户登录/注册/介绍表' collate = utf8mb4_unicode_ci;
 
 
-
 INSERT INTO car_rent.car (id, carCategoryId, carNumber, mileage, quality, imgUrl, rentPrice, color, status, createTime, updateTime, isDelete) VALUES (1, 1, '京A8888', 1000, '六成新', 'https://www.axfilm.com/public/842f1ad70a3c5bcb591c1e81d71128eb.jpg', 1000.00, '白色', 0, '2024-10-28 16:28:59', '2024-11-20 13:04:30', 0);
 INSERT INTO car_rent.car (id, carCategoryId, carNumber, mileage, quality, imgUrl, rentPrice, color, status, createTime, updateTime, isDelete) VALUES (2, 1, '京B00000', 100, '八成新', 'https://tse3-mm.cn.bing.net/th/id/OIP-C.ZNLoND95Na42tec9yPmyIQHaFj?rs=1&pid=ImgDetMain', 1200.00, '白色', 0, '2024-10-29 15:36:50', '2024-10-29 15:36:50', 0);
 INSERT INTO car_rent.car (id, carCategoryId, carNumber, mileage, quality, imgUrl, rentPrice, color, status, createTime, updateTime, isDelete) VALUES (3, 3, '鄂A00001', 100, '九成新', 'https://n.sinaimg.cn/sinacn20/16/w1920h1296/20181108/7ea6-hnprhzw5248511.jpg', 2550.00, '蓝色', 2, '2024-11-05 10:13:41', '2024-11-05 10:15:13', 0);
