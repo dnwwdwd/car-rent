@@ -272,5 +272,4 @@ public class UserController {
         List<Integer> ids = userService.list().stream().map(User::getId).collect(Collectors.toList());
         return ResultUtils.success(ids);
     }
-
 }
