@@ -261,6 +261,7 @@ public class UserController {
         return ResultUtils.success(true);
     }
 
+
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
