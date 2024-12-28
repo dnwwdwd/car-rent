@@ -85,4 +85,5 @@ public class CarController {
         List<Integer> ids = carService.list(queryWrapper).stream().map(Car::getId).collect(Collectors.toList());
         return ResultUtils.success(ids);
     }
+
 }
